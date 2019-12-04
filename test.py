@@ -40,10 +40,10 @@ async def log_ticker():
 
 
 async def log_mul_tickers():
-    tickers = await bfx.rest.get_public_tickers(['tBTCUSD', 'tETHBTC'])
+    tickers = await bfx.rest.get_public_tickers(['tBTC', 'tETHBTC'])
     print("Tickers:")
     print(tickers)
-
+    print(tickers[0][0])
 
 async def log_derivative_status():
     status = await bfx.rest.get_derivative_status('tBTCF0:USTF0')
