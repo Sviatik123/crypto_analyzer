@@ -20,6 +20,8 @@ def generate_request(columns):
 
 
 def fill_table(required_columns=['symbol', 'bid', 'bid_size', 'ask', 'ask_size', 'daily_change', 'daily_change_relative', 'last_price', 'volume', 'high', 'low']):
+    for i in table_treeview.get_children():
+        table_treeview.delete(i)
     request = generate_request(required_columns)
     result = engine.execute(request)
     table_treeview["columns"] = required_columns
@@ -33,6 +35,11 @@ def fill_table(required_columns=['symbol', 'bid', 'bid_size', 'ask', 'ask_size',
         table_treeview.insert("", index, values=str(row).strip('()').replace(',', ''))
         index += 1
 
+
+def form_column_list():
+    col_list = []
+    '''form col list'''
+    fill_table(col_list)
 
 
 def refresh_database():
@@ -57,6 +64,7 @@ def get_pairs():
 root = tk.Tk()
 root.minsize(1000, 500)
 root.title('Crypto Analyzer')
+root.resizable(False, False)
 
 menubar = tk.Menu(root)
 main_menu = tk.Menu(menubar, tearoff=0)
@@ -73,13 +81,17 @@ root.config(menu=menubar)
 
 
 table_frame = tk.LabelFrame(root, text='Frame1', padx=10, pady=10)
+
 table_frame.grid(row=0, column=0, padx=10)
 
-table_treeview = ttk.Treeview(table_frame)
+
+table_treeview = ttk.Treeview(table_frame, height=19)
 fill_table()
+scbV = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=table_treeview.yview)#not working
+table_treeview.configure(yscrollcommand=scbV.set)#not working
 table_treeview.pack(pady=5)
 
-refresh_btn = tk.Button(table_frame, text='Refresh', width=10, command=fill_table)
+refresh_btn = tk.Button(table_frame, text='Refresh', width=10)
 refresh_btn.pack(pady=5)
 
 
@@ -88,5 +100,8 @@ controls_frame.grid(row=0, column=1, padx=10)
 
 pairs_combobox = ttk.Combobox(controls_frame, values=get_pairs())
 pairs_combobox.pack()
+
+form_btn = tk.Button(controls_frame, text='Form Table', width=10, command=form_column_list)
+form_btn.pack(pady=5)
 
 root.mainloop()
