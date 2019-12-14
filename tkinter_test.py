@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import sqlalchemy as db
 
-engine = db.create_engine("sqlite:///test.db")
+engine = db.create_engine("sqlite:///crypto_analyzer.db")
 connection = engine.connect()
 metadata = db.MetaData()
 
@@ -15,7 +15,7 @@ def generate_request(columns):
             request += ' '
         else:
             request += ', '
-    request += 'FROM crypto'
+    request += 'FROM tickers'
     return request
 
 
@@ -52,11 +52,8 @@ def print_info():
 
 def get_pairs():
     pairs_file = open('pairs.txt', 'r')
-    line = pairs_file.readline()
-    pairs = []
-    while line:
-        pairs.append(line)
-        line = pairs_file.readline()
+    text = pairs_file.read()
+    pairs = text.split('\n')
     pairs_file.close()
     return pairs
 
