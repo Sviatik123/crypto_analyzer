@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/test.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="crypto_analyzer" uuid="349f8685-1209-48e2-8520-dcadac9edee8">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/crypto_analyzer.db</jdbc-url>
+    </data-source>
   </component>
 </project>

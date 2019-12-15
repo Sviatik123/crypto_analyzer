@@ -1,10 +1,12 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import sqlalchemy as db
+from database_filler import DatabaseFiller
 
 engine = db.create_engine("sqlite:///crypto_analyzer.db")
 connection = engine.connect()
 metadata = db.MetaData()
+# dbf = DatabaseFiller()
 
 
 def generate_request(columns):
@@ -43,6 +45,8 @@ def form_column_list():
 
 
 def refresh_database():
+    # dbf.refresh_tickers_table()
+    # fill_table()
     pass
 
 

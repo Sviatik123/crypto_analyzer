@@ -40,7 +40,7 @@ async def log_ticker():
 
 
 async def log_mul_tickers():
-    tickers = await bfx.rest.get_public_tickers(['tBTC', 'tETHBTC'])
+    tickers = await bfx.rest.get_public_tickers(['fBTC', 'tETHBTC'])
     print("Tickers:")
     print(tickers)
     print(tickers[0][0])
