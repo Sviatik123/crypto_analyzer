@@ -1,6 +1,7 @@
 import sqlalchemy as db
 from bfxapi import Client
 import asyncio
+import sys
 
 
 class DatabaseFiller:
@@ -14,6 +15,7 @@ class DatabaseFiller:
         tickers = await self.bfx.rest.get_public_tickers(pairs)
         print("Tickers:")
         print(tickers)
+        print(len(tickers))
         return tickers
 
     def create_tickers_table(self):
@@ -82,9 +84,9 @@ class DatabaseFiller:
                 )
                 self.connection.execute(ins)
 
-        # t = asyncio.ensure_future(run())
+        t = asyncio.ensure_future(run())
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(run())
+        loop.run_until_complete(t)
         print("database was successfully updated")
 
         # loop.close()
@@ -113,7 +115,7 @@ class DatabaseFiller:
                 )
                 self.connection.execute(ins)
 
-        # t = asyncio.ensure_future(run())
+        t = asyncio.ensure_future(run())
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(run())
+        loop.run_until_complete(t)
         print("database was successfully updated")
