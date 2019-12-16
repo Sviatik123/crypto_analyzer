@@ -32,7 +32,7 @@ def fill_table():
     result = engine.execute(request)
     table_treeview["columns"] = required_columns
     for col in required_columns:
-        table_treeview.column(col, stretch=False, width=80)
+        table_treeview.column(col, stretch=False, width=64)
         table_treeview.heading(col, text=col)
     table_treeview["show"] = "headings"
     tuples = result.fetchall()
@@ -122,7 +122,7 @@ def change_checkboxes():
 
 # preparing root
 root = tk.Tk()
-root.minsize(1550, 570)
+root.minsize(1360, 570)
 root.title('Crypto Analyzer')
 root.resizable(False, False)
 
