@@ -18,6 +18,8 @@ def generate_request(columns, db_table):
         else:
             request += ', '
     request += 'FROM ' + db_table
+    if currencies_combobox.get() != 'All':
+        request += " WHERE symbol='" + currencies_combobox.get()[1:] + "'"
     return request
 
 
@@ -84,12 +86,19 @@ def refresh_database():
     pass
 
 
-def get_pairs():
-    pairs_file = open('pairs.txt', 'r')
-    text = pairs_file.read()
-    pairs = text.split('\n')
-    pairs_file.close()
-    return pairs
+def get_currencies(currencies_type):
+    if not currencies_type:
+        pairs_file = open('pairs.txt', 'r')
+        text = pairs_file.read()
+        pairs = text.split('\n')
+        pairs_file.close()
+        return pairs
+    else:
+        pairs_file = open('currencies.txt', 'r')
+        text = pairs_file.read()
+        pairs = text.split('\n')
+        pairs_file.close()
+        return pairs
 
 
 def change_checkboxes():
@@ -98,11 +107,14 @@ def change_checkboxes():
         check_btn12.config(state=tk.DISABLED)
         check_btn13.config(state=tk.DISABLED)
         check_btn14.config(state=tk.DISABLED)
+        currencies_combobox.configure(values=get_currencies(0))
     else:
         check_btn11.config(state=tk.ACTIVE)
         check_btn12.config(state=tk.ACTIVE)
         check_btn13.config(state=tk.ACTIVE)
         check_btn14.config(state=tk.ACTIVE)
+        currencies_combobox.configure(values=get_currencies(1))
+    fill_table()
 
 
 # preparing root
@@ -140,7 +152,8 @@ treeYScroll.configure(command=table_treeview.yview)
 table_treeview.configure(yscrollcommand=treeYScroll.set)
 
 refresh_btn = tk.Button(content, text='Refresh', width=10)
-pairs_combobox = ttk.Combobox(instrument, values=get_pairs())
+currencies_combobox = ttk.Combobox(instrument, values=get_currencies(0))
+currencies_combobox.current(0)
 form_btn = tk.Button(instrument, text='Form Table', width=10, command=fill_table)
 
 # checkboxes and radiobuttons
@@ -207,7 +220,7 @@ table_treeview.grid(row=0, column=0, rowspan=6, columnspan=6, padx=(10, 0), pady
 treeXScroll.grid(row=7, column=0, columnspan=6, sticky=tk.W + tk.E, padx=(10, 5), pady=(0, 10))
 treeYScroll.grid(row=0, column=7, rowspan=6, sticky=tk.N + tk.S, padx=(0, 5), pady=(10, 0))
 refresh_btn.grid(row=8, column=0, pady=(10, 10))
-pairs_combobox.grid(row=0, column=0, padx=(5, 10), pady=(10, 10))
+currencies_combobox.grid(row=0, column=0, padx=(5, 10), pady=(10, 10))
 form_btn.grid(row=10, column=1, sticky=tk.E, padx=(5, 10), pady=(10, 0))
 
 fill_table()
