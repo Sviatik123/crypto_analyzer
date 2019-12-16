@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import sqlalchemy as db
-from database_filler import DatabaseFiller
+# from database_filler import DatabaseFiller
 
 engine = db.create_engine("sqlite:///crypto_analyzer.db")
 connection = engine.connect()
@@ -72,13 +72,10 @@ def form_column_list():
     return col_list
 
 
+# not working
 def refresh_database():
     # dbf.refresh_tickers_table()
     # fill_table()
-    pass
-
-
-def print_info():
     pass
 
 
@@ -103,14 +100,14 @@ def change_checkboxes():
         check_btn14.config(state=tk.ACTIVE)
 
 
-#preparing root
+# preparing root
 root = tk.Tk()
 root.minsize(1156, 600)
 root.title('Crypto Analyzer')
 root.resizable(False, False)
 
 
-#system menus
+# system menus
 menubar = tk.Menu(root)
 main_menu = tk.Menu(menubar, tearoff=0)
 main_menu.add_command(label="Refresh Database", command=refresh_database)
@@ -125,7 +122,7 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 root.config(menu=menubar)
 
 
-#creating controls
+# creating controls
 content = tk.Frame(root)
 instrument = tk.Frame(root)
 
@@ -138,7 +135,7 @@ refresh_btn = tk.Button(content, text='Refresh', width=10)
 pairs_combobox = ttk.Combobox(instrument, values=get_pairs())
 form_btn = tk.Button(instrument, text='Form Table', width=10, command=fill_table)
 
-#checkboxes and radiobuttons
+# checkboxes and radiobuttons
 check1 = tk.StringVar()
 check2 = tk.StringVar()
 check3 = tk.StringVar()
@@ -195,7 +192,7 @@ radio_btn2.grid(row=9, column=0, sticky=tk.W)
 
 change_checkboxes()
 
-#placing controls
+# placing controls
 content.grid(row=0, column=0, sticky=tk.W)
 instrument.grid(row=0, column=1, sticky=tk.NE)
 table_treeview.grid(row=0, column=0, rowspan=6, columnspan=6, padx=(10, 5), pady=(10, 0))
