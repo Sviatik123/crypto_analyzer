@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.ttk as ttk
 import sqlalchemy as db
 # from database_filler import DatabaseFiller
@@ -30,10 +31,10 @@ def fill_table():
     request = generate_request(required_columns, radio.get())
     result = engine.execute(request)
     table_treeview["columns"] = required_columns
-    table_treeview["show"] = "headings"
     for col in required_columns:
-        table_treeview.column(col, stretch=False, width=90)
+        table_treeview.column(col, stretch=False, width=80)
         table_treeview.heading(col, text=col)
+    table_treeview["show"] = "headings"
     tuples = result.fetchall()
     index = 0
     for row in tuples:
@@ -63,20 +64,19 @@ def form_column_list():
         col_list.append(check9.get())
     if check10.get() != '':
         col_list.append(check10.get())
-    if check11.get() != '':
+    if check11.get() != '' and radio.get() != 'tickers':
         col_list.append(check11.get())
-    if check12.get() != '':
+    if check12.get() != '' and radio.get() != 'tickers':
         col_list.append(check12.get())
-    if check13.get() != '':
+    if check13.get() != '' and radio.get() != 'tickers':
         col_list.append(check13.get())
-    if check14.get() != '':
+    if check14.get() != '' and radio.get() != 'tickers':
         col_list.append(check14.get())
     return col_list
 
 
-# not working
 def print_info():
-    pass
+    messagebox.showinfo("About", "We just wanted to do something normal.\n:)")
 
 
 # not working
@@ -92,12 +92,14 @@ def get_currencies(currencies_type):
         text = pairs_file.read()
         pairs = text.split('\n')
         pairs_file.close()
+        pairs.insert(0, 'All')
         return pairs
     else:
         pairs_file = open('currencies.txt', 'r')
         text = pairs_file.read()
         pairs = text.split('\n')
         pairs_file.close()
+        pairs.insert(0, 'All')
         return pairs
 
 
@@ -107,6 +109,7 @@ def change_checkboxes():
         check_btn12.config(state=tk.DISABLED)
         check_btn13.config(state=tk.DISABLED)
         check_btn14.config(state=tk.DISABLED)
+
         currencies_combobox.configure(values=get_currencies(0))
     else:
         check_btn11.config(state=tk.ACTIVE)
@@ -119,7 +122,7 @@ def change_checkboxes():
 
 # preparing root
 root = tk.Tk()
-root.minsize(1156, 600)
+root.minsize(1550, 570)
 root.title('Crypto Analyzer')
 root.resizable(False, False)
 
@@ -127,7 +130,7 @@ root.resizable(False, False)
 # system menus
 menubar = tk.Menu(root)
 main_menu = tk.Menu(menubar, tearoff=0)
-main_menu.add_command(label="Refresh Database", command=refresh_database)
+main_menu.add_command(label="Form Table", command=fill_table)
 main_menu.add_separator()
 main_menu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="Menu", menu=main_menu)
@@ -143,7 +146,7 @@ root.config(menu=menubar)
 content = tk.Frame(root)
 instrument = tk.Frame(root)
 
-table_treeview = ttk.Treeview(content, height=19)
+table_treeview = ttk.Treeview(content, height=25)
 treeXScroll = ttk.Scrollbar(content, orient=tk.HORIZONTAL)
 treeXScroll.configure(command=table_treeview.xview)
 table_treeview.configure(xscrollcommand=treeXScroll.set)
@@ -151,10 +154,11 @@ treeYScroll = ttk.Scrollbar(content, orient=tk.VERTICAL)
 treeYScroll.configure(command=table_treeview.yview)
 table_treeview.configure(yscrollcommand=treeYScroll.set)
 
-refresh_btn = tk.Button(content, text='Refresh', width=10)
 currencies_combobox = ttk.Combobox(instrument, values=get_currencies(0))
 currencies_combobox.current(0)
 form_btn = tk.Button(instrument, text='Form Table', width=10, command=fill_table)
+label_checkboxes = tk.Label(instrument, text='Select columns:')
+label_radio = tk.Label(instrument, text='Select tickers:')
 
 # checkboxes and radiobuttons
 check1 = tk.StringVar()
@@ -187,20 +191,20 @@ check_btn12 = tk.Checkbutton(instrument, text='bid_period', variable=check12, on
 check_btn13 = tk.Checkbutton(instrument, text='ask_period', variable=check13, onvalue='ask_period', offvalue='')
 check_btn14 = tk.Checkbutton(instrument, text='frr_amount_available', variable=check14, onvalue='frr_amount_available', offvalue='')
 
-check_btn1.grid(row=1, column=0, sticky=tk.W)
-check_btn2.grid(row=1, column=1, sticky=tk.W, padx=(0, 10))
-check_btn3.grid(row=2, column=0, sticky=tk.W)
-check_btn4.grid(row=2, column=1, sticky=tk.W, padx=(0, 10))
-check_btn5.grid(row=3, column=0, sticky=tk.W)
-check_btn6.grid(row=3, column=1, sticky=tk.W, padx=(0, 10))
-check_btn7.grid(row=4, column=0, sticky=tk.W)
-check_btn8.grid(row=4, column=1, sticky=tk.W, padx=(0, 10))
-check_btn9.grid(row=5, column=0, sticky=tk.W)
-check_btn10.grid(row=5, column=1, sticky=tk.W, padx=(0, 10))
-check_btn11.grid(row=6, column=0, sticky=tk.W)
-check_btn12.grid(row=6, column=1, sticky=tk.W, padx=(0, 10))
-check_btn13.grid(row=7, column=0, sticky=tk.W)
-check_btn14.grid(row=7, column=1, sticky=tk.W, padx=(0, 10))
+check_btn1.grid(row=2, column=0, sticky=tk.W)
+check_btn2.grid(row=2, column=1, sticky=tk.W, padx=(0, 10))
+check_btn3.grid(row=3, column=0, sticky=tk.W)
+check_btn4.grid(row=3, column=1, sticky=tk.W, padx=(0, 10))
+check_btn5.grid(row=4, column=0, sticky=tk.W)
+check_btn6.grid(row=4, column=1, sticky=tk.W, padx=(0, 10))
+check_btn7.grid(row=5, column=0, sticky=tk.W)
+check_btn8.grid(row=5, column=1, sticky=tk.W, padx=(0, 10))
+check_btn9.grid(row=6, column=0, sticky=tk.W)
+check_btn10.grid(row=6, column=1, sticky=tk.W, padx=(0, 10))
+check_btn11.grid(row=7, column=0, sticky=tk.W)
+check_btn12.grid(row=7, column=1, sticky=tk.W, padx=(0, 10))
+check_btn13.grid(row=8, column=0, sticky=tk.W)
+check_btn14.grid(row=8, column=1, sticky=tk.W, padx=(0, 10))
 
 radio = tk.StringVar()
 
@@ -208,20 +212,22 @@ radio_btn1 = tk.Radiobutton(instrument, text='Pair', variable=radio, value='tick
 radio_btn2 = tk.Radiobutton(instrument, text='Currency', variable=radio, value='tickers_on_currency', command=change_checkboxes)
 radio_btn1.select()
 radio_btn2.deselect()
-radio_btn1.grid(row=8, column=0, sticky=tk.W)
-radio_btn2.grid(row=9, column=0, sticky=tk.W)
+radio_btn1.grid(row=10, column=0, sticky=tk.W)
+radio_btn2.grid(row=10, column=1, sticky=tk.W)
 
 change_checkboxes()
 
 # placing controls
 content.grid(row=0, column=0, sticky=tk.W)
-instrument.grid(row=0, column=1, sticky=tk.NE)
 table_treeview.grid(row=0, column=0, rowspan=6, columnspan=6, padx=(10, 0), pady=(10, 0))
 treeXScroll.grid(row=7, column=0, columnspan=6, sticky=tk.W + tk.E, padx=(10, 5), pady=(0, 10))
 treeYScroll.grid(row=0, column=7, rowspan=6, sticky=tk.N + tk.S, padx=(0, 5), pady=(10, 0))
-refresh_btn.grid(row=8, column=0, pady=(10, 10))
+
+instrument.grid(row=0, column=1, sticky=tk.NE)
 currencies_combobox.grid(row=0, column=0, padx=(5, 10), pady=(10, 10))
-form_btn.grid(row=10, column=1, sticky=tk.E, padx=(5, 10), pady=(10, 0))
+form_btn.grid(row=11, column=1, sticky=tk.E, padx=(5, 10), pady=(10, 0))
+label_checkboxes.grid(row=1, column=0, sticky=tk.W, pady=(10, 0))
+label_radio.grid(row=9, column=0, sticky=tk.W, pady=(10, 0))
 
 fill_table()
 
