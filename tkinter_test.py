@@ -73,6 +73,11 @@ def form_column_list():
 
 
 # not working
+def print_info():
+    pass
+
+
+# not working
 def refresh_database():
     # dbf.refresh_tickers_table()
     # fill_table()
@@ -130,6 +135,9 @@ table_treeview = ttk.Treeview(content, height=19)
 treeXScroll = ttk.Scrollbar(content, orient=tk.HORIZONTAL)
 treeXScroll.configure(command=table_treeview.xview)
 table_treeview.configure(xscrollcommand=treeXScroll.set)
+treeYScroll = ttk.Scrollbar(content, orient=tk.VERTICAL)
+treeYScroll.configure(command=table_treeview.yview)
+table_treeview.configure(yscrollcommand=treeYScroll.set)
 
 refresh_btn = tk.Button(content, text='Refresh', width=10)
 pairs_combobox = ttk.Combobox(instrument, values=get_pairs())
@@ -195,8 +203,9 @@ change_checkboxes()
 # placing controls
 content.grid(row=0, column=0, sticky=tk.W)
 instrument.grid(row=0, column=1, sticky=tk.NE)
-table_treeview.grid(row=0, column=0, rowspan=6, columnspan=6, padx=(10, 5), pady=(10, 0))
+table_treeview.grid(row=0, column=0, rowspan=6, columnspan=6, padx=(10, 0), pady=(10, 0))
 treeXScroll.grid(row=7, column=0, columnspan=6, sticky=tk.W + tk.E, padx=(10, 5), pady=(0, 10))
+treeYScroll.grid(row=0, column=7, rowspan=6, sticky=tk.N + tk.S, padx=(0, 5), pady=(10, 0))
 refresh_btn.grid(row=8, column=0, pady=(10, 10))
 pairs_combobox.grid(row=0, column=0, padx=(5, 10), pady=(10, 10))
 form_btn.grid(row=10, column=1, sticky=tk.E, padx=(5, 10), pady=(10, 0))
